@@ -2,65 +2,73 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\evento;
-use App\Http\Requests\StoreeventoRequest;
-use App\Http\Requests\UpdateeventoRequest;
+use App\Models\Evento;
+use App\Models\Artista;
+use App\Models\Localidad;
+use Illuminate\Http\Request;
 
 class EventoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $eventos = Evento::with(['artista', 'localidad'])->get();
+        return view('eventos.index', compact('eventos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $artistas = Artista::all();
+        $localidades = Localidad::all();
+        return view('eventos.create', compact('artistas', 'localidades'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreeventoRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after:fecha_inicio',
+            'lugar' => 'required|string|max:255',
+            'artista_id' => 'nullable|exists:artistas,id',
+            'localidad_id' => 'nullable|exists:localidads,id',
+        ]);
+
+        Evento::create($request->all());
+        return redirect()->route('eventos.index')->with('success', 'Evento registrado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(evento $evento)
+    public function show(Evento $evento)
     {
-        //
+        return view('eventos.show', compact('evento'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(evento $evento)
+    public function edit(Evento $evento)
     {
-        //
+        $artistas = Artista::all();
+        $localidades = Localidad::all();
+        return view('eventos.edit', compact('evento', 'artistas', 'localidades'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateeventoRequest $request, evento $evento)
+    public function update(Request $request, Evento $evento)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after:fecha_inicio',
+            'lugar' => 'required|string|max:255',
+            'artista_id' => 'nullable|exists:artistas,id',
+            'localidad_id' => 'nullable|exists:localidads,id',
+        ]);
+
+        $evento->update($request->all());
+        return redirect()->route('eventos.index')->with('success', 'Evento actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(evento $evento)
+    public function destroy(Evento $evento)
     {
-        //
+        $evento->delete();
+        return redirect()->route('eventos.index')->with('success', 'Evento eliminado exitosamente.');
     }
 }
