@@ -2,65 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\localidad;
-use App\Http\Requests\StorelocalidadRequest;
-use App\Http\Requests\UpdatelocalidadRequest;
+use App\Models\Localidad;
+use Illuminate\Http\Request;
 
 class LocalidadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
+
     public function index()
     {
-        //
+        $localidades = Localidad::paginate(10);
+        return view('localidades.index', compact('localidades'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('localidades.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorelocalidadRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = $request->validate(['nombre' => 'required|string|max:255']);
+        Localidad::create($data);
+        return redirect()->route('localidades.index')->with('success', 'Localidad creada.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(localidad $localidad)
+    public function edit(Localidad $localidad)
     {
-        //
+        return view('localidades.edit', compact('localidad'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(localidad $localidad)
+    public function update(Request $request, Localidad $localidad)
     {
-        //
+        $data = $request->validate(['nombre' => 'required|string|max:255']);
+        $localidad->update($data);
+        return redirect()->route('localidades.index')->with('success', 'Localidad actualizada.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatelocalidadRequest $request, localidad $localidad)
+    public function destroy(Localidad $localidad)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(localidad $localidad)
-    {
-        //
+        $localidad->delete();
+        return redirect()->route('localidades.index')->with('success', 'Localidad eliminada.');
     }
 }

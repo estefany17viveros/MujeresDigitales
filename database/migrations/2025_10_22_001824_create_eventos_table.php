@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -10,14 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('eventos', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // RF1: código autoincremental
             $table->string('nombre');
-            $table->text('descripcion');
-            $table->timestamp('fecha_inicio')->nullable(); 
-            $table->timestamp('fecha_fin')->nullable();   
-            $table->string('lugar');
-            $table->foreignId('artista_id')->nullable()->constrained('artistas')->onDelete('cascade');
-            $table->foreignId('localidad_id')->nullable()->constrained('localidads')->onDelete('cascade');
+            $table->text('descripcion')->nullable();
+
+            // Fechas con nullable para evitar error MySQL 1067
+            $table->timestamp('fecha_hora_inicio')->nullable();
+            $table->timestamp('fecha_hora_fin')->nullable();
+
+            $table->string('lugar')->nullable();
             $table->timestamps();
         });
     }

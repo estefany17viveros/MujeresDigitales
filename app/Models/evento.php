@@ -9,23 +9,19 @@ class Evento extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nombre',
-        'descripcion',
-        'fecha_inicio',
-        'fecha_fin',
-        'lugar',
-        'artista_id',
-        'localidad_id',
-    ];
+    protected $table = 'eventos';
 
-    public function artista()
+    protected $fillable = ['nombre', 'descripcion', 'fecha_hora_inicio', 'fecha_hora_fin', 'lugar'];
+
+    protected $dates = ['fecha_hora_inicio', 'fecha_hora_fin'];
+
+    public function artistas()
     {
-        return $this->belongsTo(Artista::class);
+        return $this->belongsToMany(Artista::class, 'artista_evento')->withTimestamps();
     }
 
-    public function localidad()
+    public function boletas()
     {
-        return $this->belongsTo(Localidad::class);
+        return $this->hasMany(Boleta::class, 'evento_id');
     }
 }

@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
                     $table->string('nombre');
 $table->string('apellido');
-$table->integer('num_cel');
-$table->integer('num_documento');
+$table->string('num_cel', 15);
+$table->string('num_documento', 20);
+
 $table->string('contrasena');
 $table->string('email')->unique();  
 $table->enum('metodo_pago', ['tarjeta', 'paypal', 'transferencia']);

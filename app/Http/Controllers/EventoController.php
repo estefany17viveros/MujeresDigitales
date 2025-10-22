@@ -9,40 +9,54 @@ use Illuminate\Http\Request;
 
 class EventoController extends Controller
 {
+    // Mostrar todos los eventos
     public function index()
     {
-        $eventos = Evento::with(['artista', 'localidad'])->get();
+        $eventos = Evento::with('artistas', 'localidades')->get();
         return view('eventos.index', compact('eventos'));
     }
 
+    // Mostrar formulario para crear un evento
     public function create()
     {
-        $artistas = Artista::all();
-        $localidades = Localidad::all();
+        $artistas = Artista::all();       // Traer todos los artistas
+        $localidades = Localidad::all();  // Traer todas las localidades
+
         return view('eventos.create', compact('artistas', 'localidades'));
     }
 
+    // Guardar un nuevo evento
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
-            'lugar' => 'required|string|max:255',
-            'artista_id' => 'nullable|exists:artistas,id',
-            'localidad_id' => 'nullable|exists:localidads,id',
+            'descripcion' => 'nullable|string',
+            'fecha_hora_inicio' => 'required|date',
+            'fecha_hora_fin' => 'required|date|after_or_equal:fecha_hora_inicio',
+            'lugar' => 'nullable|string|max:255',
+            'artista_id' => 'required|exists:artistas,id',
+            'localidad_id' => 'required|exists:localidades,id',
         ]);
 
-        Evento::create($request->all());
-        return redirect()->route('eventos.index')->with('success', 'Evento registrado exitosamente.');
+        // Crear el evento
+        $evento = Evento::create([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'],
+            'fecha_hora_inicio' => $data['fecha_hora_inicio'],
+            'fecha_hora_fin' => $data['fecha_hora_fin'],
+            'lugar' => $data['lugar'],
+        ]);
+
+        // Asociar artista al evento (tabla pivot artista_evento)
+        $evento->artistas()->attach($data['artista_id']);
+
+        // Asociar localidad al evento (si es necesario, depende de tu diseño)
+        // $evento->localidades()->attach($data['localidad_id']);
+
+        return redirect()->route('eventos.index')->with('success', 'Evento creado correctamente');
     }
 
-    public function show(Evento $evento)
-    {
-        return view('eventos.show', compact('evento'));
-    }
-
+    // Mostrar formulario para editar un evento
     public function edit(Evento $evento)
     {
         $artistas = Artista::all();
@@ -50,25 +64,37 @@ class EventoController extends Controller
         return view('eventos.edit', compact('evento', 'artistas', 'localidades'));
     }
 
+    // Actualizar un evento
     public function update(Request $request, Evento $evento)
     {
-        $request->validate([
+        $data = $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
-            'lugar' => 'required|string|max:255',
-            'artista_id' => 'nullable|exists:artistas,id',
-            'localidad_id' => 'nullable|exists:localidads,id',
+            'descripcion' => 'nullable|string',
+            'fecha_hora_inicio' => 'required|date',
+            'fecha_hora_fin' => 'required|date|after_or_equal:fecha_hora_inicio',
+            'lugar' => 'nullable|string|max:255',
+            'artista_id' => 'required|exists:artistas,id',
+            'localidad_id' => 'required|exists:localidades,id',
         ]);
 
-        $evento->update($request->all());
-        return redirect()->route('eventos.index')->with('success', 'Evento actualizado exitosamente.');
+        $evento->update([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'],
+            'fecha_hora_inicio' => $data['fecha_hora_inicio'],
+            'fecha_hora_fin' => $data['fecha_hora_fin'],
+            'lugar' => $data['lugar'],
+        ]);
+
+        // Actualizar artista asociado
+        $evento->artistas()->sync($data['artista_id']);
+
+        return redirect()->route('eventos.index')->with('success', 'Evento actualizado correctamente');
     }
 
+    // Eliminar un evento
     public function destroy(Evento $evento)
     {
         $evento->delete();
-        return redirect()->route('eventos.index')->with('success', 'Evento eliminado exitosamente.');
+        return redirect()->route('eventos.index')->with('success', 'Evento eliminado');
     }
 }
