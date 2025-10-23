@@ -25,15 +25,15 @@ Route::get('/boletas/{boleta}/edit', [BoletaController::class, 'edit'])->name('b
 Route::put('/boletas/{boleta}', [BoletaController::class, 'update'])->name('boletas.update');
 Route::delete('/boletas/{boleta}', [BoletaController::class, 'destroy'])->name('boletas.destroy');
 
-    // 🟢 RUTAS PÚBLICAS
+    // RUTAS PÚBLICAS
 Route::post('/usuarios/register', [RegisterController::class, 'register']);
 Route::post('/usuarios/login', [UsuarioController::class, 'login'])->name('api.login');
 
-// (Opcional: vistas web si las tienes)
+// vistas web 
 Route::get('/login', [UsuarioController::class, 'loginView'])->name('login');
 Route::get('/register', [UsuarioController::class, 'registerView'])->name('register');
 
-// 🔒 RUTAS PROTEGIDAS CON SANCTUM
+//RUTAS PROTEGIDAS CON SANCTUM
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('usuarios/me', [UsuarioController::class, 'me']);
     Route::get('usuarios', [UsuarioController::class, 'index']);

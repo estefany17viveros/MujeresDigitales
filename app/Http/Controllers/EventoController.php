@@ -12,15 +12,16 @@ class EventoController extends Controller
     // Mostrar todos los eventos
     public function index()
     {
-        $eventos = Evento::with('artistas', 'localidades')->get();
+        // Cambiar 'localidades' por 'localidad' (singular) según relación belongsTo
+        $eventos = Evento::with('artistas', 'localidad')->get();
         return view('eventos.index', compact('eventos'));
     }
 
     // Mostrar formulario para crear un evento
     public function create()
     {
-        $artistas = Artista::all();       // Traer todos los artistas
-        $localidades = Localidad::all();  // Traer todas las localidades
+        $artistas = Artista::all();
+        $localidades = Localidad::all();
 
         return view('eventos.create', compact('artistas', 'localidades'));
     }
@@ -38,20 +39,18 @@ class EventoController extends Controller
             'localidad_id' => 'required|exists:localidades,id',
         ]);
 
-        // Crear el evento
+        // Crear el evento con localidad_id incluido
         $evento = Evento::create([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'fecha_hora_inicio' => $data['fecha_hora_inicio'],
             'fecha_hora_fin' => $data['fecha_hora_fin'],
             'lugar' => $data['lugar'],
+            'localidad_id' => $data['localidad_id'],
         ]);
 
-        // Asociar artista al evento (tabla pivot artista_evento)
+        // Asociar artista al evento (tabla pivote)
         $evento->artistas()->attach($data['artista_id']);
-
-        // Asociar localidad al evento (si es necesario, depende de tu diseño)
-        // $evento->localidades()->attach($data['localidad_id']);
 
         return redirect()->route('eventos.index')->with('success', 'Evento creado correctamente');
     }
@@ -77,16 +76,18 @@ class EventoController extends Controller
             'localidad_id' => 'required|exists:localidades,id',
         ]);
 
+        // Actualizar datos del evento, incluyendo localidad_id
         $evento->update([
             'nombre' => $data['nombre'],
             'descripcion' => $data['descripcion'],
             'fecha_hora_inicio' => $data['fecha_hora_inicio'],
             'fecha_hora_fin' => $data['fecha_hora_fin'],
             'lugar' => $data['lugar'],
+            'localidad_id' => $data['localidad_id'],
         ]);
 
-        // Actualizar artista asociado
-        $evento->artistas()->sync($data['artista_id']);
+        // Actualizar artista asociado (sync espera un array)
+        $evento->artistas()->sync([$data['artista_id']]);
 
         return redirect()->route('eventos.index')->with('success', 'Evento actualizado correctamente');
     }

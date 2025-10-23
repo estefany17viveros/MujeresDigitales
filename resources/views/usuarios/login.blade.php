@@ -5,30 +5,61 @@
     <title>Login - Colombia App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        
         body {
-            background: linear-gradient(to right, #FCD116, #003893, #CE1126);
+            background: linear-gradient(126deg, rgb(255 213 0 / 29%) 10%, rgb(0 80 157 / 21%) 42%, rgb(217 4 41 / 22%) 85%);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: large;
         }
         .card {
-            width: 380px;
-            border-radius: 20px;
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+            width: 552px;
+            border-radius: 10px;
             box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            height: 60vh;
+            justify-content: center;
         }
         .btn-colombia {
-            background-color: #003893;
+            background-color: hsl(45deg 100% 51% / 90%);
             color: white;
+            font-size: large;
         }
         .btn-colombia:hover {
-            background-color: #CE1126;
+            background-color: #e4cf19ff;
+            color: white;
         }
+        .form-control{
+            background-color:hsl(45deg 100% 51% / 17%) !important;
+            border-color:hsl(45deg 100% 51% / 43%) !important;
+        }
+        input:focus {
+            background-color: transparent !important;
+            box-shadow: none !important; /* Opcional: elimina el borde resaltado */
+        }
+        input:-internal-autofill-selected {
+            background-color:hsl(45deg 100% 51% / 17%) !important;
+            padding: 10px;
+            font-size: large;
+        }
+        h3{
+            color: hsl(45deg 100% 51% / 90%);
+            margin-bottom: 2rem !important;
+        }
+        .mb-3{
+            margin-bottom: 2rem !important;
+        }
+        #loginForm{
+            margin-bottom: 1rem;
+        }
+
     </style>
 </head>
 <body>
     <div class="card p-4">
-        <h3 class="text-center mb-4 text-primary">Iniciar Sesión</h3>
+        <h3 class="text-center mb-4">INICIAR SESIÓN</h3>
         <form id="loginForm">
             <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>

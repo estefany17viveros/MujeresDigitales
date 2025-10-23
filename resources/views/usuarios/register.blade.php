@@ -5,20 +5,29 @@
     <title>Registro - Colombia App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(to right, #CE1126, #FCD116, #003893);
-            height: 100vh;
+        body{
+             background: linear-gradient(126deg, rgb(255 213 0 / 29%) 10%, rgb(0 80 157 / 21%) 42%, rgb(217 4 41 / 22%) 85%);
+             height: 100vh;
+             align-content: center;
+        }
+        .registro_user{
             display: flex;
             justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
+            margin: 51px;
         }
         .card {
-            width: 420px;
+            width: 50%;
             border-radius: 20px;
             box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
             background-color: white;
             padding: 30px;
+        }
+        .divide{
+            display: flex;
+            justify-content: space-between;
+        }
+        .divide div{
+            width: 48%;
         }
         .btn-colombia {
             background-color: #FCD116;
@@ -31,7 +40,7 @@
             color: white;
         }
         h3 {
-            color: #CE1126;
+            color: #FCD116;
             font-weight: bold;
         }
         a {
@@ -45,61 +54,68 @@
     </style>
 </head>
 <body>
-    <div class="card">
-        <h3 class="text-center mb-4">🇨🇴 Crear Cuenta</h3>
-        <form id="registerForm">
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" id="nombre" class="form-control" required>
-            </div>
 
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" id="apellido" class="form-control" required>
-            </div>
+    <section class="registro_user">
+        <div class="card">
+            <h3 class="text-center mb-4">Registrarme</h3>
+            <form id="registerForm">
+                <article class="divide">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" id="nombre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" id="apellido" class="form-control" required>
+                    </div>
+                </article>
 
-            <div class="mb-3">
-                <label for="num_cel" class="form-label">Número de Celular</label>
-                <input type="text" id="num_cel" class="form-control" required>
-            </div>
+                <article class="divide">
+                    <div class="mb-3">
+                        <label for="num_cel" class="form-label">Número de Celular</label>
+                        <input type="text" id="num_cel" class="form-control" required>
+                    </div>
 
-            <div class="mb-3">
-                <label for="num_documento" class="form-label">Número de Documento</label>
-                <input type="text" id="num_documento" class="form-control" required>
-            </div>
+                    <div class="mb-3">
+                        <label for="num_documento" class="form-label">Número de Documento</label>
+                        <input type="text" id="num_documento" class="form-control" required>
+                    </div>
+                </article>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" class="form-control" required>
-            </div>
+                <article class="divide">
+                    <div class="mb-3">
+                        <label for="contrasena" class="form-label">Contraseña</label>
+                        <input type="password" id="contrasena" class="form-control" required>
+                    </div>
 
-            <div class="mb-3">
-                <label for="contrasena" class="form-label">Contraseña</label>
-                <input type="password" id="contrasena" class="form-control" required>
-            </div>
+                    <div class="mb-3">
+                        <label for="contrasena_confirmation" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" id="contrasena_confirmation" class="form-control" required>
+                    </div>
+                </article>
 
-            <div class="mb-3">
-                <label for="contrasena_confirmation" class="form-label">Confirmar Contraseña</label>
-                <input type="password" id="contrasena_confirmation" class="form-control" required>
-            </div>
+                <div class="mb-3">
+                    <label for="metodo_pago" class="form-label">Método de Pago</label>
+                    <select id="metodo_pago" class="form-select" required>
+                        <option value="tarjeta">Tarjeta</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="transferencia">Transferencia</option>
+                    </select>
+                </div>
 
-            <div class="mb-3">
-                <label for="metodo_pago" class="form-label">Método de Pago</label>
-                <select id="metodo_pago" class="form-select" required>
-                    <option value="tarjeta">Tarjeta</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="transferencia">Transferencia</option>
-                </select>
-            </div>
+                <button type="submit" class="btn btn-colombia w-100">Registrarse</button>
+            </form>
 
-            <button type="submit" class="btn btn-colombia w-100">Registrarse</button>
-        </form>
-
-        <p class="text-center mt-3">
-            ¿Ya tienes cuenta?
-            <a href="{{ route('login') }}">Inicia sesión</a>
-        </p>
-    </div>
+            <p class="text-center mt-3">
+                ¿Ya tienes cuenta?
+                <a href="{{ route('login') }}">Inicia sesión</a>
+            </p>
+        </div>
+    </section>
 
     <script>
         document.getElementById('registerForm').addEventListener('submit', async (e) => {

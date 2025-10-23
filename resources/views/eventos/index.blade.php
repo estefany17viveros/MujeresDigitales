@@ -1,160 +1,8 @@
-<<<<<<< HEAD
-@section('content')
-<h2>📅 Lista de Eventos</h2>
-<a href="{{ route('eventos.create') }}" class="btn btn-success mb-3">Agregar Evento</a>
 
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Lugar</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($eventos as $evento)
-        <tr>
-            <td>{{ $evento->id }}</td>
-            <td>{{ $evento->nombre }}</td>
-            <td>{{ $evento->descripcion }}</td>
-            <td>{{ $evento->fecha_inicio }}</td>
-            <td>{{ $evento->fecha_fin }}</td>
-            <td>{{ $evento->lugar }}</td>
-            <td>
-                <a href="{{ route('eventos.show', $evento->id) }}" class="btn btn-info btn-sm">Ver</a>
-                <a href="{{ route('eventos.edit', $evento->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" style="display:inline;">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-
-<style>
-/* Contenedor general */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f8f9fa;
-    padding: 30px;
-}
-
-/* Título */
-h2 {
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    background: linear-gradient(90deg, #FFD700 33%, #0033A0 33%, #0033A0 66%, #CE1126 66%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 25px;
-}
-
-/* Botón Agregar Evento */
-.btn-success {
-    background: linear-gradient(90deg, #FFD700, #0033A0, #CE1126);
-    border: none;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
-}
-
-.btn-success:hover {
-    background: linear-gradient(90deg, #FFEC70, #3357FF, #FF4B4B);
-    transform: scale(1.05);
-}
-
-/* Tabla */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    margin-top: 15px;
-}
-
-/* Encabezado de la tabla */
-.table thead {
-    background: linear-gradient(90deg, #FFD700, #0033A0, #CE1126);
-    color: white;
-}
-
-.table th, .table td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-/* Filas alternas */
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f3f3f3;
-}
-
-/* Bordes */
-.table-bordered th, .table-bordered td {
-    border: 1px solid #dee2e6;
-}
-
-/* Botones dentro de la tabla */
-.btn-info, .btn-primary, .btn-danger {
-    font-size: 0.85em;
-    padding: 5px 10px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    border: none;
-}
-
-.btn-info {
-    background: #0033A0;
-    color: white;
-}
-.btn-info:hover {
-    background: #001f70;
-}
-
-.btn-primary {
-    background: linear-gradient(90deg, #FFD700, #0033A0, #CE1126);
-    color: white;
-}
-.btn-primary:hover {
-    background: linear-gradient(90deg, #FFEC70, #3357FF, #FF4B4B);
-}
-
-.btn-danger {
-    background: #CE1126;
-    color: white;
-}
-.btn-danger:hover {
-    background: #a01020;
-}
-</style>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <title>Eventos disponibles</title>
-</head>
 <body>
-    
-</body>
-</html>
     <header class="encabezado">
         <nav>
             <img src="{{ asset('image/logo.png') }}" alt="">
-            <button class="inicio">Iniciar sesión</button>
         </nav>
         <main>
             <h1>¡Vive las Ferias de Colombia!</h1>
@@ -219,4 +67,157 @@ h2 {
         </table>
     </div>
 </div>
->>>>>>> 2ecb418bf437a9912606ccbb3f3fd8c907429ce1
+
+<style>
+    :root {
+    --primary-color: #800080;
+    --secondary-color: #e6cce6;
+    --text-color: #333;
+    --light-text-color: #666;
+    --background-color: #f4f7f9;
+    --border-color: #ccc;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+body { 
+    font-family: Arial, sans-serif !important; 
+    background-color: var(--background-color); 
+}
+.card { 
+    background: #fff; 
+    padding: 40px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px var(--shadow-color); 
+    width: 100%; 
+    max-width: 600px; 
+    margin: 40px auto; 
+}
+.card h1 { 
+    color: var(--primary-color); 
+    text-align: center; 
+    margin-bottom: 30px; 
+    font-size: 28px; 
+}
+.card p { 
+    margin-bottom: 15px; 
+    font-size: 16px; 
+    color: var(--text-color); 
+}
+.card strong { 
+    color: var(--primary-color); 
+    display: inline-block; width: 150px; 
+}
+.btn {
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    color: #fff; 
+    text-decoration: none; 
+    display: inline-block; 
+    margin-top: 20px; 
+}
+.btn-secondary { 
+    background-color: #6c757d; 
+}
+.btn-secondary:hover { 
+    background-color: #5a6268; 
+}
+body{
+    margin: 0 !important;
+}
+.encabezado{
+    background: #FFD500;
+    background: linear-gradient(90deg, rgba(255, 213, 0, 1) 10%, rgba(0, 80, 157, 1) 42%, rgba(217, 4, 41, 1) 85%);
+    height: 30vh;
+}
+.encabezado h1{
+    margin: 0 !important;
+}
+.encabezado main{
+    align-content: center;
+    text-align: center;
+    color: white !important;
+    font-size: larger !important;
+}
+.encabezado nav img{
+    width: 10%;
+    padding-top: 20px;
+}
+.encabezado nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.inicio{
+    background-color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    height: 45px;
+    color: darkred !important;
+}
+.fecha{
+    display: flex;
+    align-items: center;
+}
+.fecha img{
+    width: 5%;
+    margin-right: 1rem;
+}
+.card fieldset{
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-color: rgba(217, 4, 41, 1);
+    background-color:rgba(217, 4, 39, 0.144);
+}
+.btn img{
+    width: 50%;
+}
+.card h4{
+    font-size: x-large;
+    color: rgba(217, 4, 41, 1);
+}
+.volver{
+    background-color: rgba(0, 80, 157, 1);
+}
+/*----------------------ESTILOS DE EVENTOS--------------------*/
+        :root {
+            --primary-color: #d90427d7;
+            --secondary-color: #e6cce6;
+            --text-color: #333;
+            --light-text-color: #666;
+            --background-color: #f4f7f9;
+            --border-color: #ccc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        body { font-family: Arial, sans-serif; background-color: var(--background-color); }
+        .table-container { padding: 40px; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+        }
+        .alert-success { background-color: var(--secondary-color); color: var(--primary-color); padding: 15px; border-radius: 5px; border: 1px solid var(--primary-color); margin-bottom: 20px; text-align: center; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; color: #fff; text-decoration: none; margin-right: 5px; display: inline-flex; justify-content: center; align-items: center; }
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-primary:hover { background-color: #6a006a; }
+        .btn-success { background-color: rgba(0, 80, 157, 1); }
+        .btn-warning { background-color: #ffc107; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-warning:hover { background-color: #e0a800; }
+        .btn-danger:hover { background-color: #c82333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 4px 15px var(--shadow-color); background: #fff; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
+        th { background-color: var(--primary-color); color: #fff; }
+        tr:hover { background-color: #f1f1f1; }
+
+        .dimension_fechas{
+            display: flex;
+            justify-content: space-between;
+        }
+        .dimension_fechas fieldset{
+            width: 50%;
+        }
+</style>
