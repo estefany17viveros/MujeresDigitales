@@ -10,21 +10,60 @@ class EventoController extends Controller
     // Listar eventos
     public function index()
     {
+<<<<<<< HEAD
         $eventos = Evento::all();
+=======
+        // Cambiar 'localidades' por 'localidad' (singular) según relación belongsTo
+        $eventos = Evento::with('artistas', 'localidad')->get();
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
         return view('eventos.index', compact('eventos'));
     }
 
     // Vista crear evento
     public function create()
     {
+<<<<<<< HEAD
         return view('eventos.create');
+=======
+        $artistas = Artista::all();
+        $localidades = Localidad::all();
+
+        return view('eventos.create', compact('artistas', 'localidades'));
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
     // Guardar evento
     public function store(Request $request)
     {
+<<<<<<< HEAD
         Evento::create($request->all());
         return redirect()->route('eventos.index');
+=======
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'fecha_hora_inicio' => 'required|date',
+            'fecha_hora_fin' => 'required|date|after_or_equal:fecha_hora_inicio',
+            'lugar' => 'nullable|string|max:255',
+            'artista_id' => 'required|exists:artistas,id',
+            'localidad_id' => 'required|exists:localidades,id',
+        ]);
+
+        // Crear el evento con localidad_id incluido
+        $evento = Evento::create([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'],
+            'fecha_hora_inicio' => $data['fecha_hora_inicio'],
+            'fecha_hora_fin' => $data['fecha_hora_fin'],
+            'lugar' => $data['lugar'],
+            'localidad_id' => $data['localidad_id'],
+        ]);
+
+        // Asociar artista al evento (tabla pivote)
+        $evento->artistas()->attach($data['artista_id']);
+
+        return redirect()->route('eventos.index')->with('success', 'Evento creado correctamente');
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
     // Vista editar evento
@@ -36,8 +75,35 @@ class EventoController extends Controller
     // Actualizar evento
     public function update(Request $request, Evento $evento)
     {
+<<<<<<< HEAD
         $evento->update($request->all());
         return redirect()->route('eventos.index');
+=======
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'fecha_hora_inicio' => 'required|date',
+            'fecha_hora_fin' => 'required|date|after_or_equal:fecha_hora_inicio',
+            'lugar' => 'nullable|string|max:255',
+            'artista_id' => 'required|exists:artistas,id',
+            'localidad_id' => 'required|exists:localidades,id',
+        ]);
+
+        // Actualizar datos del evento, incluyendo localidad_id
+        $evento->update([
+            'nombre' => $data['nombre'],
+            'descripcion' => $data['descripcion'],
+            'fecha_hora_inicio' => $data['fecha_hora_inicio'],
+            'fecha_hora_fin' => $data['fecha_hora_fin'],
+            'lugar' => $data['lugar'],
+            'localidad_id' => $data['localidad_id'],
+        ]);
+
+        // Actualizar artista asociado (sync espera un array)
+        $evento->artistas()->sync([$data['artista_id']]);
+
+        return redirect()->route('eventos.index')->with('success', 'Evento actualizado correctamente');
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
     // Eliminar evento
