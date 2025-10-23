@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,8 +58,5 @@
         </div>
     </section>
 </body>
-<<<<<<< HEAD
+
 </html>
-=======
-</html>
->>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
