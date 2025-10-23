@@ -2,25 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Boleta;
 use App\Models\Evento;
 use App\Models\Localidad;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BoletaController extends Controller
 {
-    /**
-     * Mostrar todas las boletas.
-     */
+    // Listar todas las boletas
     public function index()
     {
-        $boletas = Boleta::with(['evento', 'localidad'])->get();
+        $boletas = Boleta::with('evento', 'localidad')->get();
         return view('boletas.index', compact('boletas'));
     }
 
-    /**
-     * Mostrar formulario para crear una nueva boleta.
-     */
+    // Mostrar detalle de una boleta
+    public function show(Boleta $boleta)
+    {
+        $boleta->load('evento', 'localidad');
+        return view('boletas.show', compact('boleta'));
+    }
+
+    // Mostrar formulario de creación
     public function create()
     {
         $eventos = Evento::all();
@@ -28,26 +32,21 @@ class BoletaController extends Controller
         return view('boletas.create', compact('eventos', 'localidades'));
     }
 
-    /**
-     * Guardar nueva boleta en la base de datos.
-     */
+    // Guardar nueva boleta
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'evento_id' => 'required|exists:eventos,id',
             'localidad_id' => 'required|exists:localidades,id',
             'valor' => 'required|numeric|min:0',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad_disponible' => 'required|integer|min:0'
         ]);
 
-        Boleta::create($validated);
-
-        return redirect()->route('boletas.index')->with('success', 'Boleta creada exitosamente');
+        Boleta::create($request->all());
+        return redirect()->route('boletas.index')->with('success', 'Boleta creada correctamente');
     }
 
-    /**
-     * Mostrar formulario para editar una boleta.
-     */
+    // Mostrar formulario de edición
     public function edit(Boleta $boleta)
     {
         $eventos = Evento::all();
@@ -55,37 +54,63 @@ class BoletaController extends Controller
         return view('boletas.edit', compact('boleta', 'eventos', 'localidades'));
     }
 
-    /**
-     * Actualizar boleta en la base de datos.
-     */
+    // Actualizar boleta existente
     public function update(Request $request, Boleta $boleta)
     {
-        $validated = $request->validate([
+        $request->validate([
             'evento_id' => 'required|exists:eventos,id',
             'localidad_id' => 'required|exists:localidades,id',
             'valor' => 'required|numeric|min:0',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad_disponible' => 'required|integer|min:0'
         ]);
 
-        $boleta->update($validated);
-
-        return redirect()->route('boletas.index')->with('success', 'Boleta actualizada exitosamente');
+        $boleta->update($request->all());
+        return redirect()->route('boletas.index')->with('success', 'Boleta actualizada correctamente');
     }
 
-    /**
-     * Eliminar boleta.
-     */
+    // Eliminar boleta
     public function destroy(Boleta $boleta)
     {
         $boleta->delete();
-        return redirect()->route('boletas.index')->with('success', 'Boleta eliminada exitosamente');
+        return redirect()->route('boletas.index')->with('success', 'Boleta eliminada correctamente');
     }
 
-    /**
-     * Mostrar detalles de una boleta.
-     */
-    public function show(Boleta $boleta)
+    // Mostrar formulario de compra
+    public function comprar(Boleta $boleta)
     {
-        return view('boletas.show', compact('boleta'));
+        return view('boletas.comprar', compact('boleta'));
+    }
+
+    // Procesar pago
+    public function pagar(Request $request, Boleta $boleta)
+    {
+        $request->validate([
+            'cantidad' => 'required|integer|min:1|max:10',
+            'metodo_pago' => 'required|string'
+        ]);
+
+        $cantidad = $request->cantidad;
+
+        if ($cantidad > $boleta->cantidad_disponible) {
+            return back()->with('error', 'No hay suficientes boletas disponibles');
+        }
+
+        $valor_total = $boleta->valor * $cantidad;
+
+        // Registrar compra
+        $compra = $boleta->compras()->create([
+            'user_id' => Auth::id(),
+            'documento' => Auth::user()->num_documento,
+            'cantidad' => $cantidad,
+            'valor_total' => $valor_total,
+            'metodo_pago' => $request->metodo_pago,
+            'estado' => 'exitosa'
+        ]);
+
+        // Descontar boletas disponibles
+        $boleta->cantidad_disponible -= $cantidad;
+        $boleta->save();
+
+        return redirect()->route('compras.index')->with('success', 'Compra realizada con éxito');
     }
 }

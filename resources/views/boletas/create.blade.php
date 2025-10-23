@@ -2,120 +2,46 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Boleta</title>
+    <title>Crear Boleta - Colombia App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav {
-            background: linear-gradient(90deg, #FFD700, #0033A0, #CE1126);
-            padding: 10px 20px;
-            color: white;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #0033A0;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        select, input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        input[type="submit"] {
-            background-color: #0033A0;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #CE1126;
-        }
-
-        .error {
-            color: red;
-            margin-bottom: 10px;
-        }
+        body { background: linear-gradient(to right, #FCD116, #003893, #CE1126); }
+        .form-container { margin: 50px auto; width: 400px; background: white; padding: 20px; border-radius: 15px; }
+        .btn-colombia { background-color: #003893; color: white; }
+        .btn-colombia:hover { background-color: #CE1126; }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{{ url('/') }}">Inicio</a>
-        <a href="{{ route('boletas.index') }}">Boletas</a>
-        <a href="{{ route('boletas.create') }}">Crear Boleta</a>
-    </nav>
-
-    <div class="container">
-        <h1>Crear Boleta</h1>
-
-        @if($errors->any())
-            @foreach($errors->all() as $error)
-                <div class="error">{{ $error }}</div>
-            @endforeach
-        @endif
-
-        <form action="{{ route('boletas.store') }}" method="POST">
-            @csrf
-            <label>Evento:</label>
-            <select name="evento_id">
+<div class="form-container">
+    <h3 class="text-center mb-4">Crear Boleta</h3>
+    <form action="{{ route('boletas.store') }}" method="POST">
+        @csrf
+        <div class="mb-3">
+            <label>Evento</label>
+            <select name="evento_id" class="form-control" required>
                 @foreach($eventos as $evento)
                     <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
                 @endforeach
             </select>
-
-            <label>Localidad:</label>
-            <select name="localidad_id">
+        </div>
+        <div class="mb-3">
+            <label>Localidad</label>
+            <select name="localidad_id" class="form-control" required>
                 @foreach($localidades as $localidad)
                     <option value="{{ $localidad->id }}">{{ $localidad->nombre }}</option>
                 @endforeach
             </select>
-
-            <label>Valor:</label>
-            <input type="number" step="0.01" name="valor">
-
-            <label>Cantidad:</label>
-            <input type="number" name="cantidad">
-
-            <input type="submit" value="Guardar">
-        </form>
-    </div>
+        </div>
+        <div class="mb-3">
+            <label>Valor</label>
+            <input type="number" name="valor" class="form-control" min="0" required>
+        </div>
+        <div class="mb-3">
+            <label>Cantidad Disponible</label>
+            <input type="number" name="cantidad_disponible" class="form-control" min="0" required>
+        </div>
+        <button class="btn btn-colombia w-100">Guardar Boleta</button>
+    </form>
+</div>
 </body>
 </html>

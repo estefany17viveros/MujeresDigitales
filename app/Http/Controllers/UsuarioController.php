@@ -10,6 +10,22 @@ use Illuminate\Validation\ValidationException;
 class UsuarioController extends Controller
 {
     /**
+     * Mostrar formulario de registro.
+     */
+    public function registerView()
+    {
+        return view('usuarios.register');
+    }
+
+    /**
+     * Mostrar formulario de login.
+     */
+    public function loginView()
+    {
+        return view('usuarios.login');
+    }
+
+    /**
      * Registrar un nuevo usuario.
      */
     public function register(Request $request)
@@ -17,13 +33,10 @@ class UsuarioController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'num_cel' => 'required|numeric',
+            'num_cel' => 'nullable|numeric',
             'num_documento' => 'required|numeric|unique:usuarios,num_documento',
             'email' => 'required|email|unique:usuarios,email',
-            'contrasena' => 'required|string|min:6',
-            'metodo_pago' => 'required|in:tarjeta,paypal,transferencia',
-            'compra_id' => 'nullable|exists:compras,id',
-            'evento_id' => 'nullable|exists:eventos,id',
+            'contrasena' => 'required|string|min:6|confirmed', // aseguramos confirmación
         ]);
 
         $usuario = Usuario::create([
@@ -33,9 +46,6 @@ class UsuarioController extends Controller
             'num_documento' => $request->num_documento,
             'email' => $request->email,
             'contrasena' => Hash::make($request->contrasena),
-            'metodo_pago' => $request->metodo_pago,
-            'compra_id' => $request->compra_id,
-            'evento_id' => $request->evento_id,
         ]);
 
         // Crear token de sesión con Sanctum
@@ -98,8 +108,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $usuarios = Usuario::all();
-        return response()->json($usuarios);
+        return response()->json(Usuario::all());
     }
 
     /**
@@ -124,15 +133,10 @@ class UsuarioController extends Controller
             'num_cel' => 'nullable|numeric',
             'num_documento' => 'nullable|numeric|unique:usuarios,num_documento,' . $usuario->id,
             'email' => 'nullable|email|unique:usuarios,email,' . $usuario->id,
-            'metodo_pago' => 'nullable|in:tarjeta,paypal,transferencia',
-            'contrasena' => 'nullable|string|min:6',
+            'contrasena' => 'nullable|string|min:6|confirmed',
         ]);
 
-        $data = $request->only([
-            'nombre', 'apellido', 'num_cel', 'num_documento',
-            'email', 'metodo_pago', 'compra_id', 'evento_id'
-        ]);
-
+        $data = $request->only(['nombre','apellido','num_cel','num_documento','email']);
         if ($request->filled('contrasena')) {
             $data['contrasena'] = Hash::make($request->contrasena);
         }
@@ -141,7 +145,7 @@ class UsuarioController extends Controller
 
         return response()->json([
             'message' => 'Usuario actualizado correctamente',
-            'usuario' => $usuario
+            'usuario' => $usuario,
         ]);
     }
 
@@ -155,14 +159,4 @@ class UsuarioController extends Controller
 
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
-    public function loginView()
-{
-    return view('usuarios.login');
-}
-
-public function registerView()
-{
-    return view('usuarios.register');
-}
-
 }

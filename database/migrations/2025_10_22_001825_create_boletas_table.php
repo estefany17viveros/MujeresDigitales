@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('boletas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('evento_id')->constrained('eventos')->onDelete('cascade');
-
             $table->foreignId('localidad_id')->constrained('localidades')->onDelete('cascade');
             $table->decimal('valor', 10, 2);
             $table->integer('cantidad_disponible')->default(0);

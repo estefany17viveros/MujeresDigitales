@@ -46,29 +46,44 @@
         </p>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+ <script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const contrasena = document.getElementById('contrasena').value;
+    const email = document.getElementById('email').value;
+    const contrasena = document.getElementById('contrasena').value;
 
-            const response = await fetch('http://localhost:8000/api/usuarios/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, contrasena })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert('✅ Inicio de sesión exitoso');
-                console.log(data);
-            } else {
-                alert('❌ Error al iniciar sesión');
-                console.error(data);
-            }
+    try {
+        const response = await fetch("{{ route('api.login') }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, contrasena })
         });
-    </script>
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+            // Guardamos token y usuario en localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.usuario));
+
+            alert('✅ Inicio de sesión exitoso');
+
+            // Redirigir a la ruta protegida correcta
+            const redirectUrl = localStorage.getItem('redirect_after_login') || "{{ route('boletas.index') }}";
+            localStorage.removeItem('redirect_after_login');
+            window.location.href = redirectUrl;
+
+        } else {
+            alert(data.message || '❌ Correo o contraseña incorrectos');
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert('❌ Error al conectarse al servidor');
+    }
+});
+</script>
+
 </body>
 </html>
