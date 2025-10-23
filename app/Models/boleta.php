@@ -2,19 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Boleta extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'evento_id',
-        'localidad_id',
-        'valor',
-        'cantidad',
-    ];
+    protected $fillable = ['evento_id','localidad_id','valor','cantidad_disponible'];
 
     public function evento()
     {
@@ -25,4 +17,10 @@ class Boleta extends Model
     {
         return $this->belongsTo(Localidad::class);
     }
+
+    public function compras()
+    {
+        return $this->hasMany(Compra::class);
+    }
 }
+

@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evento;
-use App\Models\Artista;
-use App\Models\Localidad;
 use Illuminate\Http\Request;
+use App\Models\Evento;
 
 class EventoController extends Controller
 {
-    // Mostrar todos los eventos
+    // Listar eventos
     public function index()
     {
+<<<<<<< HEAD
+        $eventos = Evento::all();
+=======
         // Cambiar 'localidades' por 'localidad' (singular) según relación belongsTo
         $eventos = Evento::with('artistas', 'localidad')->get();
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
         return view('eventos.index', compact('eventos'));
     }
 
-    // Mostrar formulario para crear un evento
+    // Vista crear evento
     public function create()
     {
+<<<<<<< HEAD
+        return view('eventos.create');
+=======
         $artistas = Artista::all();
         $localidades = Localidad::all();
 
         return view('eventos.create', compact('artistas', 'localidades'));
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
-    // Guardar un nuevo evento
+    // Guardar evento
     public function store(Request $request)
     {
+<<<<<<< HEAD
+        Evento::create($request->all());
+        return redirect()->route('eventos.index');
+=======
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
@@ -53,19 +63,22 @@ class EventoController extends Controller
         $evento->artistas()->attach($data['artista_id']);
 
         return redirect()->route('eventos.index')->with('success', 'Evento creado correctamente');
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
-    // Mostrar formulario para editar un evento
+    // Vista editar evento
     public function edit(Evento $evento)
     {
-        $artistas = Artista::all();
-        $localidades = Localidad::all();
-        return view('eventos.edit', compact('evento', 'artistas', 'localidades'));
+        return view('eventos.edit', compact('evento'));
     }
 
-    // Actualizar un evento
+    // Actualizar evento
     public function update(Request $request, Evento $evento)
     {
+<<<<<<< HEAD
+        $evento->update($request->all());
+        return redirect()->route('eventos.index');
+=======
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
@@ -90,12 +103,13 @@ class EventoController extends Controller
         $evento->artistas()->sync([$data['artista_id']]);
 
         return redirect()->route('eventos.index')->with('success', 'Evento actualizado correctamente');
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
     }
 
-    // Eliminar un evento
+    // Eliminar evento
     public function destroy(Evento $evento)
     {
         $evento->delete();
-        return redirect()->route('eventos.index')->with('success', 'Evento eliminado');
+        return redirect()->route('eventos.index');
     }
 }

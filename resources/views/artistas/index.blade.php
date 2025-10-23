@@ -1,34 +1,20 @@
-@extends('layout')
-
-@section('content')
-<h2>🎵 Lista de Artistas</h2>
-<a href="{{ route('artistas.create') }}" class="btn btn-success mb-3">Agregar Artista</a>
-
-<table class="table table-striped table-bordered">
-    <thead class="table-primary">
-        <tr>
-            <th>ID</th>
-            <th>Género</th>
-            <th>Ciudad Natal</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($artistas as $artista)
-        <tr>
-            <td>{{ $artista->id }}</td>
-            <td>{{ $artista->genero }}</td>
-            <td>{{ $artista->ciudad }}</td>
-            <td>
-                <a href="{{ route('artistas.show', $artista->id) }}" class="btn btn-info btn-sm">Ver</a>
-                <a href="{{ route('artistas.edit', $artista->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                <form action="{{ route('artistas.destroy', $artista->id) }}" method="POST" style="display:inline;">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-danger btn-sm">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
+<h2>Artistas</h2>
+<a href="{{ route('artistas.create') }}">Crear Artista</a>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Género</th>
+        <th>Ciudad Natal</th>
+    </tr>
+    @foreach($artistas as $artista)
+    <tr>
+        <td>{{ $artista->id }}</td>
+        <td>{{ $artista->nombres }}</td>
+        <td>{{ $artista->apellidos }}</td>
+        <td>{{ $artista->genero }}</td>
+        <td>{{ $artista->ciudad_natal }}</td>
+    </tr>
+    @endforeach
 </table>
-@endsection

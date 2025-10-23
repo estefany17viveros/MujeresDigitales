@@ -2,126 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Boleta</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
+            background-color: #FFD700;
+            font-family: 'Poppins';
+            text-align: center;
+            color: #003300;
         }
-
-        nav {
-            background: linear-gradient(90deg, #FFD700, #0033A0, #CE1126);
-            padding: 10px 20px;
-            color: white;
+        h1 { color: #0033A0; }
+        form {
+            background: #fff;
+            padding: 25px;
+            margin: 40px auto;
+            width: 400px;
+            border-radius: 15px;
         }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #0033A0;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        select, input[type="number"] {
-            width: 100%;
+        input {
+            width: 90%;
+            margin: 10px;
             padding: 8px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            border: 2px solid #0033A0;
+            border-radius: 8px;
         }
-
-        input[type="submit"] {
+        button {
             background-color: #0033A0;
             color: white;
-            padding: 10px 15px;
             border: none;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 10px;
             cursor: pointer;
         }
-
-        input[type="submit"]:hover {
-            background-color: #CE1126;
-        }
-
-        .error {
-            color: red;
-            margin-bottom: 10px;
+        button:hover {
+            background-color: #003300;
+            color: #FFD700;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{{ url('/') }}">Inicio</a>
-        <a href="{{ route('boletas.index') }}">Boletas</a>
-        <a href="{{ route('boletas.create') }}">Crear Boleta</a>
-    </nav>
+    <h1>✏️ Editar Boleta</h1>
+    <form action="{{ route('voletas.update', $voleta->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    <div class="container">
-        <h1>Editar Boleta</h1>
+        <label>Localidad:</label>
+        <input type="text" name="localidad" value="{{ $voleta->localidad }}" required>
 
-        @if($errors->any())
-            @foreach($errors->all() as $error)
-                <div class="error">{{ $error }}</div>
-            @endforeach
-        @endif
+        <label>Valor:</label>
+        <input type="number" name="valor" value="{{ $voleta->valor }}" required>
 
-        <form action="{{ route('boletas.update', $boleta) }}" method="POST">
-            @csrf
-            @method('PUT')
+        <label>Cantidad Disponible:</label>
+        <input type="number" name="cantidad" value="{{ $voleta->cantidad }}" required>
 
-            <label>Evento:</label>
-            <select name="evento_id">
-                @foreach($eventos as $evento)
-                    <option value="{{ $evento->id }}" {{ $boleta->evento_id == $evento->id ? 'selected' : '' }}>
-                        {{ $evento->nombre }}
-                    </option>
-                @endforeach
-            </select>
-
-            <label>Localidad:</label>
-            <select name="localidad_id">
-                @foreach($localidades as $localidad)
-                    <option value="{{ $localidad->id }}" {{ $boleta->localidad_id == $localidad->id ? 'selected' : '' }}>
-                        {{ $localidad->nombre }}
-                    </option>
-                @endforeach
-            </select>
-
-            <label>Valor:</label>
-            <input type="number" step="0.01" name="valor" value="{{ $boleta->valor }}">
-
-            <label>Cantidad:</label>
-            <input type="number" name="cantidad" value="{{ $boleta->cantidad }}">
-
-            <input type="submit" value="Actualizar">
-        </form>
-    </div>
+        <button type="submit">Actualizar</button>
+    </form>
 </body>
 </html>

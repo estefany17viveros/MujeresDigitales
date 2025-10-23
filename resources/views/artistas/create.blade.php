@@ -1,17 +1,9 @@
-@extends('layout')
-
-@section('content')
-<h2>Agregar Artista</h2>
-<form action="{{ route('artistas.store') }}" method="POST">
+<h2>Crear Artista</h2>
+<form method="POST" action="{{ route('artistas.store') }}">
     @csrf
-    <div class="mb-3">
-        <label>Género Musical:</label>
-        <input type="text" name="genero" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Ciudad Natal:</label>
-        <input type="text" name="ciudad" class="form-control" required>
-    </div>
-    <button class="btn btn-success">Guardar</button>
+    <input type="text" name="nombres" placeholder="Nombres" required>
+    <input type="text" name="apellidos" placeholder="Apellidos" required>
+    <input type="text" name="genero" placeholder="Género Musical">
+    <input type="text" name="ciudad_natal" placeholder="Ciudad Natal">
+    <button type="submit">Guardar Artista</button>
 </form>
-@endsection

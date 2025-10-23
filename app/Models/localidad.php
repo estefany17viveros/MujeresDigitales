@@ -9,12 +9,8 @@ class Localidad extends Model
 {
     use HasFactory;
 
+    // Nombre de la tabla correcto
     protected $table = 'localidades';
 
     protected $fillable = ['nombre'];
-
-    public function boletas()
-    {
-        return $this->hasMany(Boleta::class);
-    }
 }

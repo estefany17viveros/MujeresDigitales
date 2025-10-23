@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Localidad;
 use Illuminate\Http\Request;
+use App\Models\Localidad;
 
 class LocalidadController extends Controller
 {
-    
-
     public function index()
     {
-        $localidades = Localidad::paginate(10);
+        $localidades = Localidad::all();
         return view('localidades.index', compact('localidades'));
     }
 
@@ -22,9 +20,8 @@ class LocalidadController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate(['nombre' => 'required|string|max:255']);
-        Localidad::create($data);
-        return redirect()->route('localidades.index')->with('success', 'Localidad creada.');
+        Localidad::create($request->all());
+        return redirect()->route('localidades.index');
     }
 
     public function edit(Localidad $localidad)
@@ -34,14 +31,13 @@ class LocalidadController extends Controller
 
     public function update(Request $request, Localidad $localidad)
     {
-        $data = $request->validate(['nombre' => 'required|string|max:255']);
-        $localidad->update($data);
-        return redirect()->route('localidades.index')->with('success', 'Localidad actualizada.');
+        $localidad->update($request->all());
+        return redirect()->route('localidades.index');
     }
 
     public function destroy(Localidad $localidad)
     {
         $localidad->delete();
-        return redirect()->route('localidades.index')->with('success', 'Localidad eliminada.');
+        return redirect()->route('localidades.index');
     }
 }

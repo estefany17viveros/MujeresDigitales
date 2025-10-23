@@ -2,65 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\compra;
-use App\Http\Requests\StorecompraRequest;
-use App\Http\Requests\UpdatecompraRequest;
+use Illuminate\Http\Request;
+use App\Models\Compra;
+use Illuminate\Support\Facades\Auth;
 
 class CompraController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-    }
+        $compras = Compra::with('boleta.evento', 'boleta.localidad')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorecompraRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(compra $compra)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(compra $compra)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatecompraRequest $request, compra $compra)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(compra $compra)
-    {
-        //
+        return view('compras.index', compact('compras'));
     }
 }

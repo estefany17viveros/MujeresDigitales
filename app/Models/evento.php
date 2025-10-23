@@ -1,12 +1,13 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Evento extends Model
 {
+<<<<<<< HEAD
+    protected $fillable = ['nombre','descripcion','fecha_hora_inicio','fecha_hora_fin','lugar'];
+=======
     use HasFactory;
 
     protected $table = 'eventos';
@@ -32,13 +33,19 @@ class Evento extends Model
     {
         return $this->belongsToMany(Artista::class, 'artista_evento')->withTimestamps();
     }
+>>>>>>> 965daf6a2ea9b6fbdeccfe979851bccce4f38837
 
     /**
      * Relación uno a muchos con Boleta
      */
     public function boletas()
     {
-        return $this->hasMany(Boleta::class, 'evento_id');
+        return $this->hasMany(Boleta::class);
+    }
+
+    public function artistas()
+    {
+        return $this->belongsToMany(Artista::class, 'artista_evento');
     }
 
     /**
