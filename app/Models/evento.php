@@ -16,7 +16,8 @@ class Evento extends Model
         'descripcion',
         'fecha_hora_inicio',
         'fecha_hora_fin',
-        'lugar'
+        'lugar',
+        'localidad_id',  // <-- Agrega localidad_id al fillable
     ];
 
     protected $dates = [
@@ -41,10 +42,10 @@ class Evento extends Model
     }
 
     /**
-     * Relación uno a muchos con Localidad
+     * Relación muchos a uno con Localidad
      */
-    public function localidades()
+    public function localidad()
     {
-        return $this->hasMany(Localidad::class, 'evento_id');
+        return $this->belongsTo(Localidad::class, 'localidad_id');
     }
 }
